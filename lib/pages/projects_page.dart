@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zulkhaifahmed/widgets/nav_drawer.dart';
 import '../models/project_model.dart';
@@ -120,33 +121,44 @@ Built with scalability and security in mind, the system is ideal for multi-locat
                           } else {
                             crossAxisCount = 1;
                           }
-                          return GridView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: crossAxisCount,
-                              crossAxisSpacing: 20,
-                              mainAxisSpacing: 20,
-                              childAspectRatio: 3 / 2,
-                            ),
-                            itemCount: projects.length,
-                            itemBuilder: (context, index) {
-                              final project = projects[index];
-                              return ProjectCard(
-                                project: project,
-                                img: project.imageUrl,
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => ProjectView(
-                                      project: project,
-                                      img: project.imageUrl,
+                          return AnimationLimiter(
+                            child: GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: crossAxisCount,
+                                crossAxisSpacing: 20,
+                                mainAxisSpacing: 20,
+                                childAspectRatio: 3 / 2,
+                              ),
+                              itemCount: projects.length,
+                              itemBuilder: (context, index) {
+                                final project = projects[index];
+                                return AnimationConfiguration.staggeredGrid(
+                                  position: index,
+                                  duration: const Duration(milliseconds: 375),
+                                  columnCount: crossAxisCount,
+                                  child: ScaleAnimation(
+                                    child: FadeInAnimation(
+                                      child: ProjectCard(
+                                        project: project,
+                                        img: project.imageUrl,
+                                        onTap: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => ProjectView(
+                                              project: project,
+                                              img: project.imageUrl,
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ),
-                                  );
-                                },
-                              );
-                            },
+                                  ),
+                                );
+                              },
+                            ),
                           );
                         },
                       );

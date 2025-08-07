@@ -9,48 +9,84 @@ class ContactPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String linkedInUrl = 'https://www.linkedin.com/in/zulkhaif-ahmed/';
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: const CustomAppBar(currentPage: '/contact'),
       endDrawer: const NavDrawer(),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFFF7F7F7),
+              Color(0xFFE2E2E2),
+            ],
+          ),
+        ),
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Get in Touch',
+                'Connect with Me',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.playfairDisplay(
                   fontSize: 48,
                   fontWeight: FontWeight.bold,
+                  color: const Color(0xFF434446),
                 ),
               ),
               const SizedBox(height: 40),
-              Wrap(
-                alignment: WrapAlignment.center,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  const Icon(Icons.web),
-                  const SizedBox(width: 10),
-                  Text(
-                    'https://www.linkedin.com/in/zulkhaif-ahmed/',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.lato(fontSize: 16),
+              Text(
+                """I'm always open to connecting with new people. Feel free to reach out on LinkedIn!""",
+                textAlign: TextAlign.center,
+                style: GoogleFonts.poppins(
+                  fontSize: 18,
+                  color: Colors.grey[700],
+                ),
+              ),
+              const SizedBox(height: 30),
+              Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(8),
+                  onTap: () {
+                    Clipboard.setData(ClipboardData(text: linkedInUrl));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('LinkedIn URL copied to clipboard!'),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.grey.shade400),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          linkedInUrl,
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            color: const Color(0xFF434446),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        const Icon(
+                          Icons.copy,
+                          size: 18,
+                          color: Colors.grey,
+                        ),
+                      ],
+                    ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.copy),
-                    onPressed: () {
-                      Clipboard.setData(const ClipboardData(
-                              text: 'https://www.linkedin.com/in/zulkhaif-ahmed/'))
-                          .then((_) {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text('Copied to your clipboard!')));
-                      });
-                    },
-                  ),
-                ],
+                ),
               ),
             ],
           ),

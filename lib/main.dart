@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'pages/home_page.dart';
-import 'pages/about_page.dart';
+import 'pages/about_page.dart' deferred as about_page;
 import 'pages/projects_page.dart' deferred as projects_page;
-import 'pages/contact_page.dart';
+import 'pages/contact_page.dart' deferred as contact_page;
 import 'widgets/fade_page_route.dart';
 
 void main() {
@@ -33,32 +33,36 @@ class MyApp extends StatelessWidget {
           case '/':
             return FadePageRoute(page: const HomePage());
           case '/about':
-            return FadePageRoute(page: const AboutPage());
+            return _buildDeferredPageRoute(about_page.loadLibrary(), () => about_page.AboutPage());
           case '/projects':
-            return PageRouteBuilder(
-              pageBuilder: (context, animation, secondaryAnimation) {
-                return FutureBuilder(
-                  future: projects_page.loadLibrary(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      return projects_page.ProjectsPage();
-                    } else {
-                      return const Material(
-                        child: Center(child: CircularProgressIndicator()),
-                      );
-                    }
-                  },
-                );
-              },
-              transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                return FadeTransition(opacity: animation, child: child);
-              },
-            );
+            return _buildDeferredPageRoute(projects_page.loadLibrary(), () => projects_page.ProjectsPage());
           case '/contact':
-            return FadePageRoute(page: const ContactPage());
+            return _buildDeferredPageRoute(contact_page.loadLibrary(), () => contact_page.ContactPage());
           default:
             return null;
         }
+      },
+    );
+  }
+
+  PageRouteBuilder _buildDeferredPageRoute(Future<void> loader, Widget Function() pageBuilder) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return FutureBuilder(
+          future: loader,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return pageBuilder();
+            } else {
+              return const Material(
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+          },
+        );
+      },
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(opacity: animation, child: child);
       },
     );
   }

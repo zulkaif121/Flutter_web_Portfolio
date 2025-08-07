@@ -29,11 +29,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: GlassContainer(
         height: 80.0,
         width: double.infinity,
-        blur: 10,
+        blur: 30,
         borderRadius: BorderRadius.circular(16),
-        color: Colors.white.withOpacity(0.4),
-        borderColor: Colors.transparent,
-        borderWidth: 0,
+        borderColor: Colors.grey.withOpacity(0.7),
+        color: Colors.transparent,
+        borderWidth: 1,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.2),
@@ -48,10 +48,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
+
                 'PORTFOLIO',
                 style: GoogleFonts.oswald(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
+                  color: currentPage == "/" ? Colors.white : Colors.black,
+
                 ),
               ),
               Row(
